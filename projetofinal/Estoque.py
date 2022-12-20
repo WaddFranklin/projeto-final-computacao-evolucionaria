@@ -5,6 +5,7 @@ from datetime import timedelta
 
 class Estoque:
     totalProdutos = 0
+    tipos = ['fruta', 'legume', 'carne', 'limpeza', 'cereal']
 
     def __init__(self):
         self.listaFrutas = {}
@@ -19,6 +20,7 @@ class Estoque:
             "carne": self.listaCarnes,
             "cereal": self.listaCereais,
         }
+        self.load()
 
     def add(self, produto: Produto):
         if (produto.tipo == 'fruta'):
@@ -41,19 +43,17 @@ class Estoque:
         Estoque.totalProdutos += 1
         return True
 
-    def getProduto(self, tipo, id):
-        tipo = tipo.lower()
-        if tipo in self.listas:
+    def getProduto(self, id):
+        for tipo in self.tipos:
             if id in self.listas[tipo]:
                 return [True, self.listas[tipo][id]]
-            else:
-                print(
-                    f"{Color.DANGER}[Erro]: O id deste produto nao esta cadastrado no estoque.{Color.RESET}")
+            elif id == 0:
                 return [False, None]
-        else:
-            print(
-                f"{Color.DANGER}[Erro]: O tipo de produto nao eh valido.{Color.RESET}")
-            return [False, None]
+
+        # Caso não encontre o id em nenhuma das listas
+        print(
+            f"{Color.DANGER}[Erro]: O id do produto não foi encontrado.{Color.RESET}")
+        return [False, None]
 
     def remove(self, tipo, id):
         existeProduto, _ = self.getProduto(tipo, id)
@@ -80,3 +80,9 @@ class Estoque:
         print(f"| Total de cereais: {len(self.listaCereais)}")
         print("+------------------------------")
         print(self.listas)
+
+    def load(self):
+        self.add(Produto("feijão", "cereal", 1.99, 2, "01/01/2023", 10))
+        self.add(Produto("carne bovina", "carne", 20.0, 3, "02/01/2023", 13))
+        self.add(Produto("água sanitária", "limpeza", 3.5, 3, "01/01/2024", 20))
+        self.add(Produto("banana prata", "fruta", 10.58, 2, "09/01/2023", 10))
