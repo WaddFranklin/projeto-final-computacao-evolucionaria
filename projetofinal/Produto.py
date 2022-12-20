@@ -5,7 +5,7 @@ class Produto:
 
     idProduto = 0
 
-    def __init__(self, nome, tipo, preco, volume, data_vencimento):
+    def __init__(self, nome, tipo, preco, volume, data_vencimento, quantidade):
         Produto.idProduto += 1
         self.id = Produto.idProduto
         self.nome = nome
@@ -15,6 +15,7 @@ class Produto:
         self.data_vencimento = date(int(data_vencimento[6:]), int(
             data_vencimento[3:5]), int(data_vencimento[:2]))
         self.data_adicao = date.today()
+        self.quantidade = quantidade
 
     def __str__(self):
         str = ""
@@ -23,6 +24,7 @@ class Produto:
                    "tipo": self.tipo,
                    "preco": self.preco,
                    "volume": self.volume,
+                   "quantidade": self.quantidade,
                    "data_vencimento": self.data_vencimento,
                    "data_adicao": self.data_adicao}
 
@@ -37,3 +39,5 @@ class Produto:
 
     def getDataVencimento(self):
         return self.data_vencimento.strftime('%d/%m/%Y')
+    
+    
