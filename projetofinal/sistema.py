@@ -1,5 +1,6 @@
 from lib.interface import *
 from time import sleep
+from Produto import *
 
 while True:
     resposta = menu(['Recomendação de compra',
