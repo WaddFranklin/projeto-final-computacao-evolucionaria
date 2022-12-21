@@ -16,10 +16,10 @@ while True:
                     'Listar estoque', 'Sair do sistema'])
     if resposta == 1:
         recomendacao = submenu('Recomendação de compra', ['Quanto de dinheiro disponível?', 'Quantos carrinhos de compras?','Qual a preferência de compras?'])
-        print(recomendacao)
         printRecomendacao(recomendacao)
     elif resposta == 2:
         cabeçalho('Estoque')
+        #e.status()
     elif resposta == 3:
         cabeçalho('Saindo do sistema...')
         break
