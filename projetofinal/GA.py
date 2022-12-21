@@ -1,8 +1,10 @@
-from copy import copy, deepcopy
+from copy import deepcopy
+from time import sleep
 import numpy as np
 import itertools
 from Estoque import *
 from Produto import *
+from lib.interface import *
 
 
 class Chromossome:
@@ -54,11 +56,14 @@ class Population:
     MUTATION_RATE = 0.7   # 0 - 1
     INVERTION_RATE = 0.7  # 0 - 1
     MAX_AGES = 1
+    CAPACIDADE = 100
 
-    def __init__(self, estoque: Estoque, capacidade=200, dinheiro_max=1000.0) -> None:
+    def __init__(self, estoque: Estoque, capacidade=1, dinheiro_max=1000.0, filtroTipo: str = 'categoria', filtroValor=None) -> None:
         self.estoque = estoque
-        self.capacidade = capacidade
+        self.capacidade = capacidade * self.CAPACIDADE
         self.dinheiro_max = dinheiro_max
+        self.filtro_tipo = filtroTipo
+        self.filtro_valor = filtroValor
         self.chromossomes = self.generate()
         self.offspring = []
         self.age = 0
@@ -230,7 +235,28 @@ class Population:
         self.age += 1
 
     def printSolution(self, chromossome: Chromossome):
-        pass
+
+        precoTotal = 0
+        volumeTotal = 0
+        ids = np.zeros((self.estoque.totalProdutos + 1,), np.int8)
+
+        for id in chromossome.shape:
+            ids[id] += 1
+
+        cabeçalho('LISTA DE COMPRAS SUGERIDA')
+
+        for i in range(self.estoque.totalProdutos + 1):
+            if ids[i] != 0 and i != 0:
+                prod = self.estoque.getProduto(i)[1]
+                precoTotal += prod.preco * ids[i]
+                volumeTotal += prod.volume * ids[i]
+                print(
+                    f'{ids[i]}x {prod.nome} | R$ {prod.preco * ids[i]} | Volume: {prod.volume * ids[i]} unid.')
+
+        print(f'\nTotal a pagar: R$ {precoTotal} / R$ {self.dinheiro_max}')
+        print(f'Volume ocupado: {volumeTotal} unid. / {self.capacidade} unid.')
+
+        sleep(5)
 
     def run(self, selectionMode: str = 'elitism') -> None:
         while not self.stopCondition():
@@ -244,4 +270,4 @@ class Population:
             print(f'\rAGE: ' + "{:>7}".format(self.age) + ' [' + f'{Color.SUCCESS}█'*int(
                 times) + ' '*int(100 - times) + f'{Color.RESET}]', end='')
 
-        print(f'\nProblem\'s solution: ' + str(self.chromossomes[0]))
+        self.printSolution(self.chromossomes[0])

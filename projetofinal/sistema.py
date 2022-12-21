@@ -4,23 +4,20 @@ from Produto import *
 from Estoque import *
 from GA import *
 
-# Carregando o estoque
-# e = Estoque()
-# p = Population(e)
-# p.run()
+e = Estoque()
 
-
-# exit()
 while True:
     resposta = menu('SISTEMA DE COMPRAS NO SUPERMERCADO', ['Recomendação de compra',
                     'Listar estoque', 'Sair do sistema'])
     if resposta == 1:
         recomendacao = submenu('Recomendação de compra', [
                                'Quanto de dinheiro disponível?', 'Quantos carrinhos de compras?', 'Qual a preferência de compras?'])
-        printRecomendacao(recomendacao)
+
+        p = Population(e, recomendacao['qtd_carrinhos'], recomendacao['dinheiro'],
+                       recomendacao['filtro_tipo'], recomendacao['filtro_valor'])
+        p.run()
     elif resposta == 2:
         cabeçalho('Estoque')
-        # e.status()
     elif resposta == 3:
         cabeçalho('Saindo do sistema...')
         break
