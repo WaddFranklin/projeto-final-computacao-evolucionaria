@@ -1,7 +1,8 @@
-from copy import copy
+from copy import copy, deepcopy
 import numpy as np
 import itertools
 from Estoque import *
+from Produto import *
 
 
 class Chromossome:
@@ -52,7 +53,7 @@ class Population:
     CROSSOVER_RATE = 0.4  # 0 - 1
     MUTATION_RATE = 0.7   # 0 - 1
     INVERTION_RATE = 0.7  # 0 - 1
-    MAX_AGES = 5000
+    MAX_AGES = 1
 
     def __init__(self, estoque: Estoque, capacidade=200, dinheiro_max=1000.0) -> None:
         self.estoque = estoque
@@ -73,9 +74,11 @@ class Population:
 
     def generate(self) -> list:
         chromossomes = []
-        for _ in range(self.SIZE):
-            chromossomes.append(Chromossome(
-                estoque=self.estoque, maxId=self.estoque.totalProdutos))
+
+        while len(chromossomes) < self.SIZE:
+            c = Chromossome(None, self.estoque, self.estoque.totalProdutos)
+            if not self.isMonster(c):
+                chromossomes.append(c)
 
         return chromossomes
 
@@ -168,11 +171,29 @@ class Population:
             count += 1
 
     def isMonster(self, chromossome: Chromossome, mode='categoria'):
+
+        estoqueCopied = deepcopy(self.estoque)
+
+        count = 1
+        for id in chromossome.shape:
+            # print(f'------ #{count}---------')
+            if id != 0:
+                # print(estoqueCopied.getProduto(id)[1])
+
+                if estoqueCopied.getProduto(id)[1].quantidade > 0:
+                    estoqueCopied.getProduto(id)[1].quantidade -= 1
+                    # print(estoqueCopied.getProduto(id)[1])
+                else:
+                    # print(estoqueCopied.getProduto(id)[1])
+                    # print(chromossome.shape, 'EH MONSTRO')
+                    return True
+            count += 1
+
         volume_total = 0
         preco_total = 0
 
         for i in range(Chromossome.SIZE):
-            result, produto = self.estoque.getProduto(chromossome.shape[i])
+            result, produto = estoqueCopied.getProduto(chromossome.shape[i])
             if result:
                 volume_total += produto.volume
                 preco_total += produto.preco
