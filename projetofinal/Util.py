@@ -3,6 +3,7 @@ class Color:
     WARNING = '\033[93m'  # yellow
     DANGER = '\033[91m'   # red
     RESET = '\033[0m'     # default
+    BOLD = '\033[1m'      # bold
 
 def printListAsTable(title, list):
     if len(list) == 0:

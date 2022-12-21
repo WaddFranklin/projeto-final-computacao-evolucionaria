@@ -12,15 +12,17 @@ p.run()
 
 exit()
 while True:
-    resposta = menu(['Recomendação de compra',
+    resposta = menu('SISTEMA DE COMPRAS NO SUPERMERCADO',['Recomendação de compra',
                     'Listar estoque', 'Sair do sistema'])
     if resposta == 1:
-        cabeçalho('Opção 1')
+        recomendacao = submenu('Recomendação de compra', ['Quanto de dinheiro disponível?', 'Quantos carrinhos de compras?','Qual a preferência de compras?'])
+        print(recomendacao)
+        printRecomendacao(recomendacao)
     elif resposta == 2:
-        cabeçalho('Opção 2')
+        cabeçalho('Estoque')
     elif resposta == 3:
         cabeçalho('Saindo do sistema...')
         break
     else:
-        print('\033[31mERRO! Digite uma opção válida!\033[m')
+        print(f'{Color.DANGER}[Erro]: Digite uma opção válida.{Color.RESET}')
     sleep(1)
