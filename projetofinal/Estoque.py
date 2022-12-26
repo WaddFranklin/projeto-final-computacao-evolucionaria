@@ -1,5 +1,6 @@
 from Produto import *
 from Util import *
+from lib.interface import *
 from datetime import timedelta
 
 
@@ -107,4 +108,31 @@ class Estoque:
         self.add(Produto("arroz", "cereal", 3.90, 2, "18/01/2023", 10))
         self.add(Produto("trigo", "cereal", 3.99, 2, "22/01/2023", 8))
         self.add(Produto("aveia", "cereal", 4.90, 1, "21/01/2023", 6))
+
+    def printEstoque(self, resposta):
+        if resposta == 1:
+            cabeçalho('Frutas')
+            for produto in self.listaFrutas:
+                print(self.listaFrutas[produto].printProduto())
+        elif resposta == 2:
+            cabeçalho('Legumes')
+            for produto in self.listaLegumes:
+                print(self.listaLegumes[produto].printProduto())
+        elif resposta == 3:
+            cabeçalho('Carnes')
+            for produto in self.listaCarnes:
+                print(self.listaCarnes[produto].printProduto())
+        elif resposta == 4:
+            cabeçalho('Produtos de Limpeza')
+            for produto in self.listaLimpeza:
+                print(self.listaLimpeza[produto].printProduto())  
+        elif resposta == 5:
+                cabeçalho('Cereais')
+                for produto in self.listaCereais:
+                    print(self.listaCereais[produto].printProduto())   
+        elif resposta == 6:
+            cabeçalho('Todos os produtos')
+            for lista in self.listas:
+                for produto in self.listas[lista]:
+                    print(self.listas[lista][produto].printProduto())
 

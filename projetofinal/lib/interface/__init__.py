@@ -1,19 +1,18 @@
 from Util import *
 import locale
+import os
+clear = lambda: os.system('clear')
 
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
-tipos = ['fruta', 'legume', 'carne', 'limpeza', 'cereal']
+tipos = ['Fruta', 'Legume', 'Carne', 'Limpeza', 'Cereal']
 
-
-def linha(tam=42):
+def linha(tam=73):
     return '-' * tam
-
 
 def cabeçalho(txt):
     print(linha())
-    print(f'{Color.BOLD}{txt.center(42)}{Color.RESET}')
+    print(f'{Color.BOLD}{txt.center(73)}{Color.RESET}')
     print(linha())
-
 
 def menu(titulo, lista):
     cabeçalho(titulo)
@@ -23,8 +22,8 @@ def menu(titulo, lista):
         c += 1
     print(linha())
     opc = leiaInt('Sua opção: ')
+    clear()
     return opc
-
 
 def submenu(titulo, lista):
     cabeçalho(titulo)
@@ -63,7 +62,7 @@ def submenu(titulo, lista):
         'filtro_tipo': filtro,
         'filtro_valor': categorias[filtro_valor],
     }
-
+    clear()
     return filtros
 
 

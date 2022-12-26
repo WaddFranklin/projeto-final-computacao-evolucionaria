@@ -40,4 +40,5 @@ class Produto:
     def getDataVencimento(self):
         return self.data_vencimento.strftime('%d/%m/%Y')
     
-    
+    def printProduto(self):
+        return f'{self.id} | {self.nome} | R$ {self.preco} | {self.volume}m³ | {self.quantidade} unid. | val. {self.getDataVencimento()}'
