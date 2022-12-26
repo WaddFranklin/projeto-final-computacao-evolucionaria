@@ -88,6 +88,12 @@ class Estoque:
         self.add(Produto("uva", "fruta", 7.5, 1, "10/01/2024", 11))
         self.add(Produto("banana prata", "fruta", 10.58, 2, "09/01/2023", 10))
         self.add(Produto("melância", "fruta", 8.35, 3, "03/01/2023", 12))
+        self.add(Produto("mamão", "fruta", 11.35, 3, "03/01/2023", 23))
+        self.add(Produto("abacate", "fruta", 8.99, 3, "03/01/2023", 25))
+        self.add(Produto("melão", "fruta", 7.4, 5, "03/01/2023", 15))
+        self.add(Produto("laranja", "fruta", 10.00, 2, "03/01/2023", 42))
+        self.add(Produto("limão", "fruta", 3.45, 3, "03/01/2023", 12))
+
         self.add(Produto("inhame", "legume", 6.98, 4, "08/01/2023", 15))
         self.add(Produto("cebola", "legume", 5.99, 3, "06/01/2023", 25))
         self.add(Produto("beterraba", "legume", 3.90, 2, "05/01/2023", 10))
@@ -103,11 +109,24 @@ class Estoque:
         self.add(Produto("amaciante", "limpeza", 7.5, 3, "11/06/2024", 16))
         self.add(Produto("sabão em pó", "limpeza", 3.5, 7, "01/01/2024", 19))
         self.add(Produto("esponja", "limpeza", 1.5, 10, "01/01/2024", 20))
+        self.add(Produto("saco de lixo", "limpeza", 10.40, 2, "03/01/2023", 11))
+        self.add(Produto("desinfetante", "limpeza", 5.35, 3, "03/01/2023", 11))
+        self.add(Produto("bom ar", "limpeza", 7.90, 3, "03/01/2023", 11))
+        self.add(Produto("desengordurante", "limpeza",
+                 15.70, 2, "03/01/2023", 11))
+        self.add(Produto("lava roupas", "limpeza", 40.00, 5, "03/01/2023", 11))
+
         self.add(Produto("feijão", "cereal", 1.99, 2, "01/01/2023", 10))
         self.add(Produto("milho", "cereal", 5.99, 3, "12/01/2023", 7))
         self.add(Produto("arroz", "cereal", 3.90, 2, "18/01/2023", 10))
         self.add(Produto("trigo", "cereal", 3.99, 2, "22/01/2023", 8))
         self.add(Produto("aveia", "cereal", 4.90, 1, "21/01/2023", 6))
+        self.add(Produto("amaranto", "cereal", 7.90, 1, "03/01/2023", 11))
+        self.add(Produto("linhaça", "cereal", 11.70, 3, "03/01/2023", 11))
+        self.add(Produto("quinoa", "cereal", 8.30, 2, "03/01/2023", 11))
+        self.add(Produto("cevada", "cereal", 20.80, 1, "03/01/2023", 11))
+        self.add(Produto("chia", "cereal", 15.00, 3, "03/01/2023", 11))
+        
 
     def printEstoque(self, resposta):
         if resposta == 1:

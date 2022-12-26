@@ -6,15 +6,23 @@ from Estoque import *
 from Produto import *
 from lib.interface import *
 
+limits = {
+    'fruta': [1, 10],
+    'legume': [11, 15],
+    'carne': [16, 20],
+    'limpeza': [21, 25],
+    'cereal': [26, 30],
+}
+
 
 class Chromossome:
     SIZE = 30
     ESTOQUE = None
 
-    def __init__(self, chromossome: list = None, estoque: Estoque = None, maxId=2) -> None:
+    def __init__(self, chromossome: list = None, estoque: Estoque = None, maxId=2, minId=0) -> None:
         self.ESTOQUE = estoque
         if chromossome == None:
-            self.shape = np.random.randint(0, maxId + 1, (self.SIZE,))
+            self.shape = np.random.randint(minId, maxId + 1, (self.SIZE,))
             self.adaptation = 0
             self.fitness()
         elif len(chromossome) == self.SIZE:
@@ -45,7 +53,7 @@ class Chromossome:
                 preco_total += produto.preco
 
         # print(f'volume = {volume_total}, preco = {preco_total}')
-        self.adaptation = volume_total - preco_total
+        self.adaptation = (volume_total + preco_total) / 2
 
 
 class Population:
@@ -55,10 +63,10 @@ class Population:
     CROSSOVER_RATE = 0.4  # 0 - 1
     MUTATION_RATE = 0.7   # 0 - 1
     INVERTION_RATE = 0.7  # 0 - 1
-    MAX_AGES = 1
+    MAX_AGES = 3000
     CAPACIDADE = 100
 
-    def __init__(self, estoque: Estoque, capacidade=1, dinheiro_max=1000.0, filtroTipo: str = 'categoria', filtroValor=None) -> None:
+    def __init__(self, estoque: Estoque, capacidade=1, dinheiro_max=1000.0, filtroTipo: str = 'categoria', filtroValor='carne') -> None:
         self.estoque = estoque
         self.capacidade = capacidade * self.CAPACIDADE
         self.dinheiro_max = dinheiro_max
@@ -81,9 +89,13 @@ class Population:
         chromossomes = []
 
         while len(chromossomes) < self.SIZE:
-            c = Chromossome(None, self.estoque, self.estoque.totalProdutos)
-            if not self.isMonster(c):
+            c = Chromossome(
+                None, self.estoque, limits[self.filtro_valor][1], limits[self.filtro_valor][0])
+            # print(c)
+            if not self.isMonster(c, self.filtro_tipo, self.filtro_valor):
                 chromossomes.append(c)
+            # print(len(chromossomes))
+            # sleep(0.5)
 
         return chromossomes
 
@@ -123,10 +135,10 @@ class Population:
                     # print(chromossome1)
                     # print(chromossome2)
 
-                    if not self.isMonster(chromossome1):
+                    if not self.isMonster(chromossome1, self.filtro_tipo, self.filtro_valor):
                         self.offspring.append(chromossome1)
 
-                    if not self.isMonster(chromossome2):
+                    if not self.isMonster(chromossome2, self.filtro_tipo, self.filtro_valor):
                         self.offspring.append(chromossome2)
 
     def mutation(self) -> None:
@@ -143,7 +155,7 @@ class Population:
                 chromossome = Chromossome(
                     list(descendant), self.estoque, self.estoque.totalProdutos)
 
-                if not self.isMonster(chromossome):
+                if not self.isMonster(chromossome, self.filtro_tipo, self.filtro_valor):
                     self.offspring.append(chromossome)
 
     def inversion(self) -> None:
@@ -165,7 +177,7 @@ class Population:
 
                 # print(f'descendant -> ' + str(chromossome))
 
-                if not self.isMonster(chromossome):
+                if not self.isMonster(chromossome, self.filtro_tipo, self.filtro_valor):
                     self.offspring.append(chromossome)
 
     def showOffspring(self) -> None:
@@ -175,7 +187,7 @@ class Population:
             # print(f'{count} - ' + str(chromossome))
             count += 1
 
-    def isMonster(self, chromossome: Chromossome, mode='categoria'):
+    def isMonster(self, chromossome: Chromossome, mode='categoria', value=None):
 
         estoqueCopied = deepcopy(self.estoque)
 
@@ -183,15 +195,15 @@ class Population:
         for id in chromossome.shape:
             # print(f'------ #{count}---------')
             if id != 0:
-                # print(estoqueCopied.getProduto(id)[1])
-
-                if estoqueCopied.getProduto(id)[1].quantidade > 0:
-                    estoqueCopied.getProduto(id)[1].quantidade -= 1
-                    # print(estoqueCopied.getProduto(id)[1])
-                else:
-                    # print(estoqueCopied.getProduto(id)[1])
-                    # print(chromossome.shape, 'EH MONSTRO')
-                    return True
+                prod = estoqueCopied.getProduto(id)[1]
+                if mode == 'categoria':
+                    if prod.quantidade > 0 and prod.tipo == value:
+                        prod.quantidade -= 1
+                    else:
+                        # print('ACABOU NO ESTOQUE')
+                        return True
+                elif mode == 'validade':
+                    pass
             count += 1
 
         volume_total = 0
@@ -204,6 +216,10 @@ class Population:
                 preco_total += produto.preco
 
         if volume_total > self.capacidade or preco_total > self.dinheiro_max:
+            # if volume_total > self.capacidade:
+            #     print('VOLUME ULTRAPASSADO')
+            # else:
+            #     print('DINHEIRO ULTRAPASSADO')
             return True
         return False
 
@@ -238,6 +254,7 @@ class Population:
 
         precoTotal = 0
         volumeTotal = 0
+        totalItens = 0
         ids = np.zeros((self.estoque.totalProdutos + 1,), np.int8)
 
         for id in chromossome.shape:
@@ -250,9 +267,11 @@ class Population:
                 prod = self.estoque.getProduto(i)[1]
                 precoTotal += prod.preco * ids[i]
                 volumeTotal += prod.volume * ids[i]
+                totalItens += ids[i]
                 print(
                     f'{ids[i]}x {prod.nome} | R$ {prod.preco * ids[i]} | Volume: {prod.volume * ids[i]} unid.')
 
+        print(f'\nTotal de itens: {totalItens} produtos')
         print(f'\nTotal a pagar: R$ {precoTotal} / R$ {self.dinheiro_max}')
         print(f'Volume ocupado: {volumeTotal} unid. / {self.capacidade} unid.')
 
