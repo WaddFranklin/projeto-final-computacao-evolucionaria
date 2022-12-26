@@ -9,9 +9,10 @@ from lib.interface import *
 limits = {
     'fruta': [1, 10],
     'legume': [11, 15],
-    'carne': [16, 20],
-    'limpeza': [21, 25],
-    'cereal': [26, 30],
+    'carne': [16, 21],
+    'limpeza': [22, 31],
+    'cereal': [32, 41],
+    'todos': [1, 41],
 }
 
 
@@ -47,24 +48,25 @@ class Chromossome:
         preco_total = 0
 
         for i in range(self.SIZE):
+            # [22 12 2 34 21]
             result, produto = self.ESTOQUE.getProduto(self.shape[i])
             if result:
                 volume_total += produto.volume
                 preco_total += produto.preco
 
         # print(f'volume = {volume_total}, preco = {preco_total}')
-        self.adaptation = (volume_total + preco_total) / 2
+        self.adaptation = ((9 * volume_total) + preco_total) / 10
 
 
 class Population:
 
     SIZE = 10
-    OFFSET = 5            # n | n < SIZE
-    CROSSOVER_RATE = 0.4  # 0 - 1
-    MUTATION_RATE = 0.7   # 0 - 1
-    INVERTION_RATE = 0.7  # 0 - 1
-    MAX_AGES = 3000
-    CAPACIDADE = 100
+    OFFSET = 5
+    CROSSOVER_RATE = 0.5
+    MUTATION_RATE = 0.85
+    INVERTION_RATE = 0.85
+    MAX_AGES = 1000
+    CAPACIDADE = 200
 
     def __init__(self, estoque: Estoque, capacidade=1, dinheiro_max=1000.0, filtroTipo: str = 'categoria', filtroValor='carne') -> None:
         self.estoque = estoque
@@ -197,10 +199,14 @@ class Population:
             if id != 0:
                 prod = estoqueCopied.getProduto(id)[1]
                 if mode == 'categoria':
-                    if prod.quantidade > 0 and prod.tipo == value:
+
+                    if value == 'todos' and prod.quantidade > 0:
+                        prod.quantidade -= 1
+                    elif prod.tipo == value and prod.quantidade > 0:
                         prod.quantidade -= 1
                     else:
                         # print('ACABOU NO ESTOQUE')
+                        # sleep(0.7)
                         return True
                 elif mode == 'validade':
                     pass
@@ -218,8 +224,10 @@ class Population:
         if volume_total > self.capacidade or preco_total > self.dinheiro_max:
             # if volume_total > self.capacidade:
             #     print('VOLUME ULTRAPASSADO')
+            #     sleep(0.7)
             # else:
             #     print('DINHEIRO ULTRAPASSADO')
+            #     sleep(0.7)
             return True
         return False
 
@@ -255,6 +263,7 @@ class Population:
         precoTotal = 0
         volumeTotal = 0
         totalItens = 0
+
         ids = np.zeros((self.estoque.totalProdutos + 1,), np.int8)
 
         for id in chromossome.shape:

@@ -1,18 +1,22 @@
 from Util import *
 import locale
 import os
-clear = lambda: os.system('clear')
+def clear(): return os.system('clear')
+
 
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
-tipos = ['Fruta', 'Legume', 'Carne', 'Limpeza', 'Cereal']
+tipos = ['Fruta', 'Legume', 'Carne', 'Limpeza', 'Cereal', 'Todos']
+
 
 def linha(tam=73):
     return '-' * tam
+
 
 def cabeçalho(txt):
     print(linha())
     print(f'{Color.BOLD}{txt.center(73)}{Color.RESET}')
     print(linha())
+
 
 def menu(titulo, lista):
     cabeçalho(titulo)
@@ -24,6 +28,7 @@ def menu(titulo, lista):
     opc = leiaInt('Sua opção: ')
     clear()
     return opc
+
 
 def submenu(titulo, lista):
     cabeçalho(titulo)
@@ -39,13 +44,10 @@ def submenu(titulo, lista):
             respostas.append(subOpcao(['Um carrinho', 'Dois carrinhos']))
             print(linha())
         elif i == 2:
-            resposta = subOpcao(['Categoria', 'Validade em número de dias'])
+            resposta = subOpcao(['Categoria'])
             if resposta == 1:
                 respostas.append(categoria())
                 respostas.append('')
-            elif resposta == 2:
-                respostas.append('')
-                respostas.append(leiaInt('Validade (dias): '))
             else:
                 print(
                     f'{Color.DANGER}[Erro]: Digite uma opção válida.{Color.RESET}')
@@ -55,7 +57,7 @@ def submenu(titulo, lista):
 
     filtro = 'categoria' if respostas[3] == '' else 'validade'
     filtro_valor = respostas[2] if respostas[3] == '' else respostas[3]
-    categorias = ['fruta', 'legume', 'carne', 'limpeza', 'cereal']
+    categorias = ['fruta', 'legume', 'carne', 'limpeza', 'cereal', 'todos']
     filtros = {
         'dinheiro': respostas[0],
         'qtd_carrinhos': respostas[1],

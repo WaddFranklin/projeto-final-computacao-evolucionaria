@@ -99,11 +99,14 @@ class Estoque:
         self.add(Produto("beterraba", "legume", 3.90, 2, "05/01/2023", 10))
         self.add(Produto("batata inglesa", "legume", 3.99, 2, "04/01/2023", 14))
         self.add(Produto("cenoura", "legume", 4.90, 1, "03/01/2023", 11))
+
         self.add(Produto("carne bovina", "carne", 30.0, 3, "05/01/2023", 13))
         self.add(Produto("peito de frango", "carne", 20.0, 2, "12/01/2023", 10))
         self.add(Produto("sardinha", "carne", 12.0, 3, "02/01/2023", 12))
         self.add(Produto("coxa de frango", "carne", 18.90, 1, "03/01/2023", 17))
-        self.add(Produto("salmão", "carne", 89.90, 1, "10/01/2023", 13))
+        self.add(Produto("piaba", "carne", 3.90, 1, "10/01/2023", 13))
+        self.add(Produto("salsicha", "carne", 5.90, 1, "10/01/2023", 13))
+
         self.add(Produto("água sanitária", "limpeza", 3.5, 3, "01/01/2024", 20))
         self.add(Produto("detergente", "limpeza", 1.50, 5, "01/05/2024", 18))
         self.add(Produto("amaciante", "limpeza", 7.5, 3, "11/06/2024", 16))
@@ -114,7 +117,7 @@ class Estoque:
         self.add(Produto("bom ar", "limpeza", 7.90, 3, "03/01/2023", 11))
         self.add(Produto("desengordurante", "limpeza",
                  15.70, 2, "03/01/2023", 11))
-        self.add(Produto("lava roupas", "limpeza", 40.00, 5, "03/01/2023", 11))
+        self.add(Produto("lava roupas", "limpeza", 25.00, 5, "03/01/2023", 11))
 
         self.add(Produto("feijão", "cereal", 1.99, 2, "01/01/2023", 10))
         self.add(Produto("milho", "cereal", 5.99, 3, "12/01/2023", 7))
@@ -124,9 +127,8 @@ class Estoque:
         self.add(Produto("amaranto", "cereal", 7.90, 1, "03/01/2023", 11))
         self.add(Produto("linhaça", "cereal", 11.70, 3, "03/01/2023", 11))
         self.add(Produto("quinoa", "cereal", 8.30, 2, "03/01/2023", 11))
-        self.add(Produto("cevada", "cereal", 20.80, 1, "03/01/2023", 11))
-        self.add(Produto("chia", "cereal", 15.00, 3, "03/01/2023", 11))
-        
+        self.add(Produto("cevada", "cereal", 7.80, 1, "03/01/2023", 11))
+        self.add(Produto("chia", "cereal", 9.00, 3, "03/01/2023", 11))
 
     def printEstoque(self, resposta):
         if resposta == 1:
@@ -144,14 +146,13 @@ class Estoque:
         elif resposta == 4:
             cabeçalho('Produtos de Limpeza')
             for produto in self.listaLimpeza:
-                print(self.listaLimpeza[produto].printProduto())  
+                print(self.listaLimpeza[produto].printProduto())
         elif resposta == 5:
-                cabeçalho('Cereais')
-                for produto in self.listaCereais:
-                    print(self.listaCereais[produto].printProduto())   
+            cabeçalho('Cereais')
+            for produto in self.listaCereais:
+                print(self.listaCereais[produto].printProduto())
         elif resposta == 6:
             cabeçalho('Todos os produtos')
             for lista in self.listas:
                 for produto in self.listas[lista]:
                     print(self.listas[lista][produto].printProduto())
-
